@@ -37,7 +37,7 @@ client.on("interactionCreate", async interaction => {
             await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     
         }
-    } else if (command == "mute" && interaction.member.permissions.has(Permissions.FLAGS.TIMEOUT_MEMBERS) {
+    } else if (command == "mute" && interaction.member.permissions.has(Permissions.FLAGS.TIMEOUT_MEMBERS)) {
         if (interaction.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
             try {
                 await command.execute(interaction);
