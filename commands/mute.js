@@ -27,13 +27,13 @@ module.exports = {
         const time = ms(interaction.options.getString("time"));
         if (!time) interaction.reply({
             content: "Please provice a valid time! e.g. 300s, 3m, 12h",
-            ephermal: true
+            ephemeral: true
         });
 
         const response = await tgt.timeout(time, reason);
         if (!response) interaction.reply({
             content: "Unable to timeout this member!",
-            ephermal: true
+            ephemeral: true
         });
 
         interaction.reply({

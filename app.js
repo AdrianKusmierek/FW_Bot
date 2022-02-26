@@ -1,4 +1,4 @@
-const { Client, Collection, Intents, Permissions } = require("discord.js");
+const { Client, Collection, Intents, Permissions, MessageEmbed } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const { token } = require("./config.json");
 const fs = require("fs");
@@ -87,7 +87,20 @@ client.on("messageCreate", message => {
             
             rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
             .then(() => {
-                console.log(`${(new Date).toLocaleDateString('pl-PL')} ${(new Date).toLocaleTimeString('en-US')}: Successfully deployed the commands!`)
+                var out = "";
+                const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+
+                commandFiles.forEach(file => {
+                    out += file + "\n";
+                });
+
+                const embed = new MessageEmbed()
+                .setTitle("Deployed:")
+                .setDescription(out)
+                .setColor("#fbffd6");
+
+                console.log(`${(new Date).toLocaleDateString('pl-PL')} ${(new Date).toLocaleTimeString('en-US')}: Successfully deployed the commands!`);
+                message.channel.send({ embeds: [embed] });
             })
             .catch(console.error);
         } catch (err) {
