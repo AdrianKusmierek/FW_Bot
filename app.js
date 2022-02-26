@@ -55,7 +55,7 @@ client.on("interactionCreate", async interaction => {
 //////////////////////////////////////////////////////////////////////////////
 
 client.on("messageCreate", message => {
-    if (message.content.toLowerCase() == "!deploy") {
+    if (message.content.toLowerCase() == "!deploy" || message.author.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
         const { REST } = require("@discordjs/rest");
         const { Routes } = require("discord-api-types/v9");
         const { token, clientId, guildId } = require("./config");
