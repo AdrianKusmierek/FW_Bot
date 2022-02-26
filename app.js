@@ -12,10 +12,13 @@ cmdFiles.forEach(file => {
     client.commands.set(cmd.data.name, cmd);
 });
 
+//////////////////////////////////////////////////////////////////////////////
+
 client.once('ready', () => {
     console.log(`Logged in as: ${client.user.tag}`);
-
 });
+
+//////////////////////////////////////////////////////////////////////////////
 
 client.on("interactionCreate", async interaction => {
     if (!interaction.isCommand()) return;
@@ -46,6 +49,42 @@ client.on("interactionCreate", async interaction => {
         
             }
         }
+    }
+});
+
+//////////////////////////////////////////////////////////////////////////////
+
+client.on("messageCreate", message => {
+    if (message.content.toLowerCase() == "!deploy") {
+        const { REST } = require("@discordjs/rest");
+        const { Routes } = require("discord-api-types/v9");
+        const { token, clientId, guildId } = require("./config");
+        const fs = require("fs");
+        
+        const commands = [];
+        const cmdFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+        
+        cmdFiles.forEach(file => {
+            const cmd = require(`./commands/${file}`);
+        
+            commands.push(cmd.data.toJSON());
+        });
+        
+        const rest = new REST({ version: "9" }).setToken(token);
+        
+        rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+        .then(() => {
+            message.channel.send("Successfully deployed the commands!")
+            .then(msg => {
+                (async function() {
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+                    msg.delete();
+                    message.delete();
+                })();
+            });
+        })
+        .catch(console.error);
     }
 });
 
