@@ -1,54 +1,43 @@
-/*
-To be made
-
-https://discord.com/developers/docs/resources/guild#modify-guild-member
-*/
-
 const { SlashCommandBuilder } = require("@discordjs/builders");
+const ms = require("ms");
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("mute")
-    .setDescription("Time for mute in minutes")
-    .addUserOption(x => 
-        x
-        .setName("user")
-        .setDescription("Select a user")
+    .setDescription("Command for muting members")
+    .addUserOption(user => user
+        .setName("member")
+        .setDescription("Choose the member to mute")
+        .setRequired(true)
     )
-    .addIntegerOption(x =>
-        x
+    .addStringOption(time => time
         .setName("time")
-        .setDescription("Select amount of time for the mute")
+        .setDescription("Mute time")
+        .setRequired(true)
+    )
+    .addStringOption(reason => reason
+        .setName("reason")
+        .setDescription("Reason for the mute")
     ),
 
     async execute(interaction) {
-        var myVar = interaction.options._hoistedOptions;
+        const tgt = interaction.options.getMember("member");
+        const reason = interaction.options.getString("reason");
 
-        for (let i = 0; myVar.length - 1; i++) {
-            for (const x in myVar[i]) {
-                if (x == "value") {
-                    let z = myVar[i][x];
-                    let tgt;
-                    let time;
+        const time = ms(interaction.options.getString("time"));
+        if (!time) interaction.reply({
+            content: "Please provice a valid time! e.g. 300s, 3m, 12h",
+            ephermal: true
+        });
 
-                    if (z.length > 3) {
-                        tgt = interaction.guild.members.cache.find(x => x.id == z);
-                    } else {
-                        time = z;
-                    }
+        const response = await tgt.timeout(time, reason);
+        if (!response) interaction.reply({
+            content: "Unable to timeout this member!",
+            ephermal: true
+        });
 
-                    // console.log(tgt.communication_disabled_until);
-
-                    let temp = tgt;
-                    for (const y in temp) {
-                        if (y == "communicationDisabledUntilTimestamp") {
-                            console.log(temp[y]);
-                        }
-                    }
-                }
-            }
-        }
+        interaction.reply({
+            content: `**Timed out out** *${tgt}*\n**Duration:** *${ms(time, { long: true })}*\n**Reason:** *${reason}*`,
+        });
     }
 }
-
-//Coded by A.S. Kuśmierek
