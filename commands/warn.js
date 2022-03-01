@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
+const fs = require("fs");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -38,5 +39,36 @@ module.exports = {
         });
 
         user.send({ embeds: [embed] });
+
+//////////////////////////////////////////////////////////////////////////////
+
+        var dataPath = require('path').resolve(__dirname, '..') + "/data"
+        var myData = fs.readFileSync(`${dataPath}/warns.json`, "utf8");
+        var data = JSON.parse(myData);
+
+        var warnObj = {
+            username: user.user.tag,
+            reason: [reason],
+            warns: +1
+        };
+
+        if (data.length < 1) {
+            data.push(warnObj);
+        } else {
+            data.forEach(xdata => {
+                if (data.some(item => item.username == user.user.tag)) {
+                    if (xdata.username == user.user.tag) {
+                        xdata.warns++;
+                        xdata.reason.push(reason);
+                    }
+                } else {
+                    data.push(warnObj);
+                }
+            });
+        }
+
+        myData = JSON.stringify(data);
+
+        fs.writeFileSync(`${dataPath}/warns.json`, myData, "utf8");
     }
 }
