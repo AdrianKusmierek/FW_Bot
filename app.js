@@ -12,10 +12,40 @@ cmdFiles.forEach(file => {
     client.commands.set(cmd.data.name, cmd);
 });
 
+function deploy() {
+    try {
+        const { REST } = require("@discordjs/rest");
+        const { Routes } = require("discord-api-types/v9");
+        const { token, clientId, guildId } = require("./config");
+        const fs = require("fs");
+        
+        const commands = [];
+        const cmdFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+        
+        cmdFiles.forEach(file => {
+            const cmd = require(`./commands/${file}`);
+        
+            commands.push(cmd.data.toJSON());
+        });
+        
+        const rest = new REST({ version: "9" }).setToken(token);
+        
+        rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+        .then(() => {
+            console.log(`${(new Date).toLocaleDateString('pl-PL')} ${(new Date).toLocaleTimeString('en-US')}: Successfully deployed the commands!`);
+        })
+        .catch(console.error);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 client.once('ready', () => {
     console.log(`Logged in as: ${client.user.tag}`);
+
+    deploy();
 });
 
 //////////////////////////////////////////////////////////////////////////////
@@ -68,44 +98,7 @@ client.on("interactionCreate", async interaction => {
 
 client.on("messageCreate", message => {
     if (message.content.toLowerCase() == "!deploy" && message.member.permissions.has("ADMINISTRATOR")) {
-        try {
-            const { REST } = require("@discordjs/rest");
-            const { Routes } = require("discord-api-types/v9");
-            const { token, clientId, guildId } = require("./config");
-            const fs = require("fs");
-            
-            const commands = [];
-            const cmdFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
-            
-            cmdFiles.forEach(file => {
-                const cmd = require(`./commands/${file}`);
-            
-                commands.push(cmd.data.toJSON());
-            });
-            
-            const rest = new REST({ version: "9" }).setToken(token);
-            
-            rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-            .then(() => {
-                var out = "";
-                const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
-
-                commandFiles.forEach(file => {
-                    out += file + "\n";
-                });
-
-                const embed = new MessageEmbed()
-                .setTitle("Deployed:")
-                .setDescription(out)
-                .setColor("#fbffd6");
-
-                console.log(`${(new Date).toLocaleDateString('pl-PL')} ${(new Date).toLocaleTimeString('en-US')}: Successfully deployed the commands!`);
-                message.channel.send({ embeds: [embed] });
-            })
-            .catch(console.error);
-        } catch (err) {
-            console.error(err);
-        }
+        deploy();
     }
 });
 
