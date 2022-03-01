@@ -12,6 +12,8 @@ cmdFiles.forEach(file => {
     client.commands.set(cmd.data.name, cmd);
 });
 
+//////////////////////////////////////////////////////////////////////////////
+
 function deploy() {
     try {
         const { REST } = require("@discordjs/rest");
