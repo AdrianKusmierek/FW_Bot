@@ -80,7 +80,7 @@ client.on("interactionCreate", async interaction => {
             }
         }
     } else {
-        if (interaction.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
+        if (interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
             try {
                 await command.execute(interaction);
         
