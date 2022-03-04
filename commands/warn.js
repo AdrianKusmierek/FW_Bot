@@ -34,7 +34,7 @@ module.exports = {
         .setColor("#fbffd6");
 
         interaction.reply({ 
-            content: `**User** *${user}* **has been warned!**\n**Reason:** *${reason}*`,
+            content: `**User** ${user} **has been warned!**\n**Reason:** ${reason}`,
             ephemeral: true
         });
 

@@ -28,7 +28,7 @@ module.exports = {
                     out_t = xdata.warns;
 
                     xdata.reason.forEach(item => {
-                        out += `*${item}*\n`
+                        out += `${item}\n`
                     });
                 }
             } else {
@@ -39,7 +39,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
         .setTitle(`${user.user.username}'s Warnings`)
-        .setDescription(`**Total Warnings:**\n*${out_t}*\n\n**Warnings:**\n${out}`)
+        .setDescription(`**Total Warnings:**\n${out_t}\n\n**Warnings:**\n${out}`)
         .setColor("#fbffd6");
 
         await interaction.reply({ embeds: [embed] });
