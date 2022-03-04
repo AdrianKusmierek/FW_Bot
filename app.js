@@ -117,7 +117,7 @@ setInterval(function() {
 
         if (x.toString() == d.toString()) {
             console.log("All warnings have been reset!")
-            fs.writeFileSync("data/warns.json", '[]', "utf8");
+            fs.writeFileSync("data/warns.json", "[]", "utf8");
         }
     }
 }, 43200000);
