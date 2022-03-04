@@ -106,4 +106,22 @@ client.on("messageCreate", message => {
 
 //////////////////////////////////////////////////////////////////////////////
 
+setInterval(function() {
+    var tgt = new Date(2023, 0, 1);
+    var daysOfYear = [];
+    for (var d = new Date(2022, 2, 7); d <= tgt; d.setDate(d.getDate() + 7)) {
+        daysOfYear.push(new Date(d));
+
+        const x = new Date();
+        x.setHours(0, 0, 0, 0);
+
+        if (x.toString() == d.toString()) {
+            console.log("All warnings have been reset!")
+            fs.writeFileSync("data/warns.json", '[]', "utf8");
+        }
+    }
+}, 43200000);
+
+/////////////////////////////////////////////////////////////////////////////
+
 client.login(token);

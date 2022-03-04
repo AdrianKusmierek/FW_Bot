@@ -42,7 +42,7 @@ module.exports = {
 
 //////////////////////////////////////////////////////////////////////////////
 
-        var dataPath = require('path').resolve(__dirname, '..') + "/data"
+        var dataPath = require("path").resolve(__dirname, '..') + "/data"
         var myData = fs.readFileSync(`${dataPath}/warns.json`, "utf8");
         var data = JSON.parse(myData);
 
