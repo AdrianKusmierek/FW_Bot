@@ -1,7 +1,15 @@
-const { Client, Collection, Intents, Permissions, MessageEmbed } = require("discord.js");
+//////////////////////////////////////////////////////////////////////////////
+/*                         Primary Modules and Files                        */
+//////////////////////////////////////////////////////////////////////////////
+
+const { Client, Collection, Intents, Permissions } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 const { token } = require("./config.json");
 const fs = require("fs");
+
+//////////////////////////////////////////////////////////////////////////////
+/*                          Getting the Command Files                       */
+//////////////////////////////////////////////////////////////////////////////
 
 client.commands = new Collection();
 const cmdFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
@@ -12,6 +20,8 @@ cmdFiles.forEach(file => {
     client.commands.set(cmd.data.name, cmd);
 });
 
+//////////////////////////////////////////////////////////////////////////////
+/*                                 Functions                                */
 //////////////////////////////////////////////////////////////////////////////
 
 function deploy() {
@@ -43,13 +53,17 @@ function deploy() {
 }
 
 //////////////////////////////////////////////////////////////////////////////
+/*                          Basic Startup Procedure                         */
+//////////////////////////////////////////////////////////////////////////////
 
-client.once('ready', () => {
+client.once("ready", () => {
     console.log(`Logged in as: ${client.user.tag}`);
 
     deploy();
 });
 
+//////////////////////////////////////////////////////////////////////////////
+/*                      Command & Permission Handling                       */
 //////////////////////////////////////////////////////////////////////////////
 
 client.on("interactionCreate", async interaction => {
@@ -97,6 +111,8 @@ client.on("interactionCreate", async interaction => {
 });
 
 //////////////////////////////////////////////////////////////////////////////
+/*                         Manual Command Deployment                        */
+//////////////////////////////////////////////////////////////////////////////
 
 client.on("messageCreate", message => {
     if (message.content.toLowerCase() == "!deploy" && message.member.permissions.has("ADMINISTRATOR")) {
@@ -104,6 +120,8 @@ client.on("messageCreate", message => {
     }
 });
 
+//////////////////////////////////////////////////////////////////////////////
+/*                   Weekly Wipe of the Warns.json File                     */
 //////////////////////////////////////////////////////////////////////////////
 
 setInterval(function() {
@@ -120,8 +138,10 @@ setInterval(function() {
             fs.writeFileSync("data/warns.json", "[]", "utf8");
         }
     }
-}, 43200000);
+}, 21600000);
 
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+/*                           Logging Into the Bot                           */
+//////////////////////////////////////////////////////////////////////////////
 
 client.login(token);
