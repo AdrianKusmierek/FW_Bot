@@ -121,7 +121,7 @@ client.on("messageCreate", message => {
 });
 
 //////////////////////////////////////////////////////////////////////////////
-/*                   Weekly Wipe of the Warns.json File                     */
+/*                   Weekly Wipe of the warns.json File                     */
 //////////////////////////////////////////////////////////////////////////////
 
 setInterval(function() {
