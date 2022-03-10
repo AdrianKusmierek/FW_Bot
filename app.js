@@ -89,7 +89,7 @@ client.on("interactionCreate", async interaction => {
 
     if (!command) return;
 
-    if (command == "author") {
+    async function commandExecute() {
         try {
             await command.execute(interaction);
     
@@ -99,29 +99,20 @@ client.on("interactionCreate", async interaction => {
             await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     
         }
+    }
+
+    if (command == "author") {
+        commandExecute();
+
     } else if (command == "mute" && interaction.member.permissions.has(Permissions.FLAGS.TIMEOUT_MEMBERS)) {
+
         if (interaction.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) {
-            try {
-                await command.execute(interaction);
-        
-            } catch (error) {
-                console.error(error);
-        
-                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-        
-            }
+            commandExecute();
         }
     } else {
+
         if (interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-            try {
-                await command.execute(interaction);
-        
-            } catch (error) {
-                console.error(error);
-        
-                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-        
-            }
+            commandExecute();
         }
     }
 });
