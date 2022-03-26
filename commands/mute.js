@@ -3,7 +3,7 @@ const ms = require("ms");
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName("mute")
+    .setName("muzzle")
     .setDescription("Command for muting members")
     .addUserOption(user => user
         .setName("member")
@@ -38,6 +38,7 @@ module.exports = {
 
         interaction.reply({
             content: `**Timed out out** *${tgt}*\n**Duration:** *${ms(time, { long: true })}*\n**Reason:** *${reason}*`,
+            ephemeral: true
         });
     }
 }

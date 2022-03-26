@@ -23,8 +23,8 @@ module.exports = {
         var out_t = "";
 
         data.forEach(xdata => {
-            if (data.some(item => item.username == user.user.tag)) {
-                if (xdata.username == user.user.tag) {
+            if (data.some(item => item.username == user.user.id)) {
+                if (xdata.username == user.user.id) {
                     out_t = xdata.warns;
 
                     xdata.reason.forEach(item => {

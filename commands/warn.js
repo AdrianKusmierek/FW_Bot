@@ -1,6 +1,14 @@
+//////////////////////////////////////////////////////////////////////////////
+/*                               Main Variables                             */
+//////////////////////////////////////////////////////////////////////////////
+
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed } = require("discord.js");
 const fs = require("fs");
+
+//////////////////////////////////////////////////////////////////////////////
+/*                               Main Function                              */
+//////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -40,31 +48,37 @@ module.exports = {
 
         user.send({ embeds: [embed] });
 
-//////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////
+        /*                             Writing to File                              */
+        //////////////////////////////////////////////////////////////////////////////
 
         var dataPath = require("path").resolve(__dirname, '..') + "/data"
         var myData = fs.readFileSync(`${dataPath}/warns.json`, "utf8");
         var data = JSON.parse(myData);
 
         var warnObj = {
-            username: user.user.tag,
+            username: user.user.id,
             reason: [reason],
             warns: +1
         };
 
-        if (data.length < 1) {
-            data.push(warnObj);
+        if (data.warns < 2) {
+            user.kick("Too many warnings!");
         } else {
-            data.forEach(xdata => {
-                if (data.some(item => item.username == user.user.tag)) {
-                    if (xdata.username == user.user.tag) {
-                        xdata.warns++;
-                        xdata.reason.push(reason);
+            if (data.length < 1) {
+                data.push(warnObj);
+            } else {
+                data.forEach(xdata => {
+                    if (data.some(item => item.username == user.user.id)) {
+                        if (xdata.username == user.user.id) {
+                            xdata.warns++;
+                            xdata.reason.push(reason);
+                        }
+                    } else {
+                        data.push(warnObj);
                     }
-                } else {
-                    data.push(warnObj);
-                }
-            });
+                });
+            }
         }
 
         myData = JSON.stringify(data);
