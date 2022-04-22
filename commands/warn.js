@@ -28,6 +28,7 @@ module.exports = {
     async execute(interaction) {
         const user = interaction.options.getMember("user");
         const reason = interaction.options.getString("reason");
+        console.log(interaction.member.guild.channels)
 
         const warnMsg = `Hi ${user}!
         You've been warned in Furry World for ${reason}.
@@ -41,7 +42,7 @@ module.exports = {
         .setDescription(warnMsg)
         .setColor("#fbffd6");
 
-        interaction.reply({ 
+        await interaction.reply({ 
             content: `**User** ${user} **has been warned!**\n**Reason:** ${reason}`,
             ephemeral: true
         });
@@ -49,7 +50,7 @@ module.exports = {
         user.send({ embeds: [embed] });
 
         //////////////////////////////////////////////////////////////////////////////
-        /*                             Writing to File                              */
+        /*                               Warn Function                              */
         //////////////////////////////////////////////////////////////////////////////
 
         var dataPath = require("path").resolve(__dirname, '..') + "/data"
@@ -62,27 +63,32 @@ module.exports = {
             warns: +1
         };
 
-        if (data.warns < 2) {
-            user.kick("Too many warnings!");
+        if (data.length < 1) {
+            data.push(warnObj);
         } else {
-            if (data.length < 1) {
-                data.push(warnObj);
-            } else {
-                data.forEach(xdata => {
-                    if (data.some(item => item.username == user.user.id)) {
-                        if (xdata.username == user.user.id) {
-                            xdata.warns++;
-                            xdata.reason.push(reason);
-                        }
-                    } else {
-                        data.push(warnObj);
+            //////////////////////////////////////////////////////////////////////////////
+            /*                               Writing to File                            */
+            //////////////////////////////////////////////////////////////////////////////
+
+            data.forEach(xdata => {
+                if (data.some(item => item.username == user.user.id)) {
+                    if (xdata.username == user.user.id) {
+                        xdata.warns++;
+                        xdata.reason.push(reason);
                     }
-                });
-            }
+                } else {
+                    data.push(warnObj);
+                }
+            });
         }
 
         myData = JSON.stringify(data);
 
         fs.writeFileSync(`${dataPath}/warns.json`, myData, "utf8");
+
+        //////////////////////////////////////////////////////////////////////////////
+        /*                                 Logging                                  */
+        //////////////////////////////////////////////////////////////////////////////
+        // console.log(channel);
     }
 }
