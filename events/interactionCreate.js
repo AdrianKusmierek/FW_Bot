@@ -7,7 +7,7 @@ module.exports = {
         if (!interaction.isCommand()) return;
 
         const command = commands.get(interaction.commandName);
-        const { disabled, init, execute } = commands.get(interaction.commandName);
+        const { disabled, init, execute } = command;
         const cmdName = command.data.name;
 
         if (!command) return;
