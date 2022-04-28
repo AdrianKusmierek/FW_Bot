@@ -28,10 +28,9 @@ module.exports = {
     async execute(interaction) {
         const user = interaction.options.getMember("user");
         const reason = interaction.options.getString("reason");
-        console.log(interaction.member.guild.channels)
 
         const warnMsg = `Hi ${user}!
-        You've been warned in Furry World for ${reason}.
+        You've been warned in Furry World by <@${interaction.member.user.id}> for ${reason}.
         If you think that warning is unrightful please feel free to contact our Staff Team!
         
         Yours,
@@ -89,6 +88,14 @@ module.exports = {
         //////////////////////////////////////////////////////////////////////////////
         /*                                 Logging                                  */
         //////////////////////////////////////////////////////////////////////////////
-        // console.log(channel);
+        
+        const logChannel = interaction.guild.channels.cache.get("969295508499746868");
+
+        const logEmbed = new MessageEmbed()
+        .setTitle(`Warned ${user.user.tag}`)
+        .setDescription(`**Reason:** ${reason}\n**Warned by:** <@${interaction.member.user.id}>`)
+        .setColor("#fbffd6");
+
+        logChannel.send({ embeds: [logEmbed] });
     }
 }

@@ -6,9 +6,6 @@ module.exports = {
         .setDescription("Displays the name of the author of the project"),
 
     async execute(interaction) {
-        await interaction.reply({
-            content: "Coded by A. S. \"Huskyy\" Kuśmierek",
-            ephemeral: true
-        });
+        await interaction.reply("Coded by A. S. \"Huskyy\" Kuśmierek");
     }
 }

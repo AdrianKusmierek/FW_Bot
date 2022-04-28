@@ -103,7 +103,16 @@ module.exports = {
             collected.deferUpdate();
         });
 
-        await interaction.reply({ embeds: [embed], components: [row] });
+        // await interaction.reply({ content: "Interaction Executed Successfully!", ephemeral: true });
+        // console.log(chnl);
+        // chnl.send({ embeds: [embed], components: [row] });
+        client.guilds.fetch(guildId)
+        .then(guild => 
+            guild.channels.fetch(menuChannelId)
+            .then(channel => 
+                channel.send({ embeds: [embed], components: [row] })
+            )   
+        );
     }
 }
 

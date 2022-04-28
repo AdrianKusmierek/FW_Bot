@@ -4,9 +4,11 @@
 
 const { Client, Collection, Intents} = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-const { token } = require("./config.json");
+const { token } = require("./config");
 const fs = require("fs");
 const { warnsReset } = require("./functions");
+
+module.exports.client = client;
 
 //////////////////////////////////////////////////////////////////////////////
 /*                          Command & Event Handling                        */

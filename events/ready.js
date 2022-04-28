@@ -7,5 +7,7 @@ module.exports = {
         console.log(`Logged in as: ${client.user.tag}`);
         
         deploy();
+
+        client.user.setActivity("myself burn~", { type: "WATCHING" });
     }
 }
