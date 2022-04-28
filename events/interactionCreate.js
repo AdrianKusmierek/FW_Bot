@@ -1,5 +1,4 @@
 const { commands } = require("../app");
-const { Permissions } = require("discord.js");
 
 module.exports = {
     name: "interactionCreate",
@@ -8,13 +7,16 @@ module.exports = {
         if (!interaction.isCommand()) return;
 
         const command = commands.get(interaction.commandName);
+        const { disabled, init, execute } = commands.get(interaction.commandName);
+        const cmdName = command.data.name;
 
         if (!command) return;
 
         async function commandExecute() {
             try {
-                if (command.init) command.init();
-                await command.execute(interaction);
+                if (disabled) return;
+                if (init) command.init();
+                await execute(interaction);
     
             } catch (error) {
                 console.error(error);
@@ -24,7 +26,7 @@ module.exports = {
             }
         }
 
-        if (command.data.name == "author" || interaction.member.roles.cache.has("898669078280011827")) {
+        if (cmdName == "author" || interaction.member.roles.cache.has("898669078280011827")) {
             commandExecute();
         } else {
             interaction.reply("Insufficent Permissions");

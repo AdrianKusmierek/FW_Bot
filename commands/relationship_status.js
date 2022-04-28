@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageActionRow, MessageSelectMenu, MessageEmbed } = require("discord.js");
 
 module.exports = {
+    disabled: true,
+
     data: new SlashCommandBuilder()
         .setName("relationship_status")
         .setDescription("Role menu for choosing your relationship status!"),
